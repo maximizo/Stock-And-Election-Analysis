@@ -1,75 +1,79 @@
-#import os module
+#import os module 
 import os
 
 #import module for reading csv file
 import csv
 
 #set path for csv file
-csvpath = os.path.join('..', 'resources', 'PyPoll.csv')
+csvpath = os.path.join('..','resources','PyBank.csv')
+
+#set data lists
+profit = []
+monthlychange = []
+date = []
 
 #set variables
-votes = 0
-votecount = []
-candidates = []
-percentages = []
+totalmonths = 0
+totalprofit = 0
+totalprofitchange = 0
+beginningprofit = 0
 
-#open csv file 
-with open(csvpath) as csvfile:
+#open the csv
+with open(csvpath, newline='') as csvfile:
     csvreader = csv.reader(csvfile, delimiter = ',')
-    next(csvreader)
+
+    #skip the header
+    csvheader = next(csvreader)
 
     #begin collecting data
     for row in csvreader:
-
-        #calculate number of votes
-        votes = votes + 1
-
-        #identify candidate 
-        candidate = row[2]
-
-        #calculate votes per candidate
-        if candidate in candidates:
-            candidateid = candidates.index(candidate)
-            votecount[candidateid] = votecount[candidateid] + 1
         
-        else:
-            candidates.append(candidate)
-            votecount.append(int(1))
+        #count the total number of months
+        totalmonths = totalmonths + 1
 
-#calculate percentage of votes per candidate
-mostvotes = votecount[0]
-mostvotesid = 0
-for count in range(len(candidates)):
-    votepercent = (votecount[count]/votes)*100
-    percentages.append(votepercent)
+        #capture data for finding greatest profit and greatest loss
+        date.append(row[0])
 
-    #identify winner
-    if votecount[count] > mostvotes:
-        print(mostvotes)
-        mostvotesid = count
-winner = candidates[mostvotesid]
+        #calculate total profit
+        profit.append(row[1])
+        totalprofit = totalprofit + int(row[1])
 
+        #calculate avg monthly profit change
+        finalprofit = int(row[1])
 
-#print results
-percentages = [round (i,5) for i in percentages]
-print("Election Results")
-print("--------------------------")
-print(f'Total Votes:  {votes}')
-print("--------------------------")
-for count in range(len(candidates)):
-    print(f'{candidates[count]}: {percentages[count]}% ({votecount[count]})')
-print("--------------------------")
-print("Winner: " + str(winner))
-print("--------------------------")
+        #calculate total avg profit change 
+        monthlyprofitchange = finalprofit - beginningprofit
 
-#produce .txt file
-with open('Election_Analysis.txt', 'w') as text:
-    text.write("Election Results\n")
+        #save monthly changes in a list
+        monthlychange.append(monthlyprofitchange)
+        totalprofitchange = (totalprofitchange + monthlyprofitchange)
+        beginningprofit = finalprofit
+
+        #calculate avg change in profits over entire period
+        avgprofitchange = round(monthlyprofitchange/totalmonths,2)
+
+        #find the greatest profit and greatest loss
+        greatestprofit = max(monthlychange)
+        greatestloss = min(monthlychange)
+        greatestprofitdate = date[monthlychange.index(greatestprofit)]
+        greatestlossdate = date[monthlychange.index(greatestloss)]
+
+    #print results
+    print("Financial Analysis")
+    print("--------------------------")
+    print("Toal Months: " + str(totalmonths))
+    print("Total: $" + str(totalprofit))
+    print("Average Change: $" + str(int(avgprofitchange)))
+    print("Greatest Increase in Profits: " + str(greatestprofitdate) + " ($" + str(greatestprofit) + ")")
+    print("Greatest Decrease in Profits: " + str(greatestlossdate) + " ($" + str(greatestloss) + ")")
+
+#Produce .txt file
+with open('Financial_Analysis.txt','w') as text:
+    text.write("Financial Analysis\n")
     text.write("--------------------------\n")
-    text.write(f'Total Votes:  {votes}\n')
-    text.write("--------------------------\n")
-    for count in range(len(candidates)):
-        text.write(f'{candidates[count]}: {percentages[count]}% ({votecount[count]})')
-        text.write("--------------------------\n")
-        text.write("Winner: " + str(winner) + "\n")
-        text.write("--------------------------\n")
+    text.write("Total Months: " + str(totalmonths) + "\n")
+    text.write("Total: $" + str(totalprofit) + "\n")
+    text.write("Average Change: $" + str(int(avgprofitchange)) + "\n")
+    text.write("Greatest Increase in Profits: " + str(greatestprofitdate) + " ($" + str(greatestprofit) + ")\n")
+    text.write("Greatest Decrease in Profits: " + str(greatestlossdate) + " ($" + str(greatestloss) + ")\n")
+
