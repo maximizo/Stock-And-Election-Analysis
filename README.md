@@ -21,7 +21,8 @@ In the second part of the project, I will write a Python script to analyze the e
 * The winner of the election based on popular vote.
 
 ## Example Outputs 
-### Bank Data
+### Bank Data:
+  ```text
   Financial Analysis
   ----------------------------
   Total Months: 86
@@ -29,7 +30,8 @@ In the second part of the project, I will write a Python script to analyze the e
   Average  Change: $-2315.12
   Greatest Increase in Profits: Feb-2012 ($1926159)
   Greatest Decrease in Profits: Sep-2013 ($-2196167)
-
+  ```
+  
 ### Election Data:
   ```text
   Election Results
