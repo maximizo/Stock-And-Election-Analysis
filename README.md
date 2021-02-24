@@ -1,6 +1,6 @@
-## Project Description
+## Analyzing Bank and Election Data
 
-This project is comprised of two smaller projects, which are an analysis of bank data and election data.
+This analysis is comprised of two smaller analyses, which include a dive into simple bank data and election data.
 
 ## Features & Libraries
 * Python
